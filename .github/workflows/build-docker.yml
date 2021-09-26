@@ -15,7 +15,7 @@ jobs:
       MGM_IMAGE: taina/freqtrade-mgm
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      DOCKER_TARGET_PLATFORM: linux/amd64
+      DOCKER_TARGET_PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -38,7 +38,6 @@ jobs:
     - name: Run Buildx for FreqTrade
       if: success()
       run: |
-        docker pull ${FREQTRADE_IMAGE}:${FREQTRADE_COMMIT} || \
         cd freqtrade && \
         docker buildx build \
         --platform ${DOCKER_TARGET_PLATFORM} \
