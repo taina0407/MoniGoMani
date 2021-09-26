@@ -1,3 +1,18 @@
+# .github/
+# Documentation/
+# docker/
+# docker_temp/
+# Some Test Results/
+# .editorconfig
+# .gitignore
+# .pre-commit-config.yaml
+# .pylintrc
+# .docker-compose.yml
+# Dockerfile
+
+
+# build-docker.sh
+
 # Ignore the Private Config to prevent accidental pushing
 user_data/mgm-config-private.json
 
@@ -84,3 +99,7 @@ setup.py
 setup.sh
 
 .DS_Store
+
+# MGM Docker ignores
+Dockerfile
+.temp

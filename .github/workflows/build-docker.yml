@@ -1,0 +1,55 @@
+name: Build/Publish Docker Image
+
+on:
+  push:
+    branches:
+      - 'cicd-test'
+  pull_request:
+
+jobs:
+  build_freqtrade:
+    runs-on: ubuntu-latest
+    env:
+      FREQTRADE_COMMIT: 3503fdb4ec31be99f433fdce039543e0911964d6
+      FREQTRADE_IMAGE: taina/freqtrade-mgm-ft
+      MGM_IMAGE: taina/freqtrade-mgm
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      DOCKER_TARGET_PLATFORM: linux/amd64
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Checkout freqtrade code
+      uses: actions/checkout@v2
+      with:
+        repository: freqtrade/freqtrade
+        path: freqtrade
+        ref: ${{ env.FREQTRADE_COMMIT }}
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    - name: Set up Docker Buildx
+      uses: crazy-max/ghaction-docker-buildx@v1
+    - name: Docker Login
+      if: success()
+      run: |
+        echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
+    - name: Run Buildx for FreqTrade
+      if: success()
+      run: |
+        docker pull ${FREQTRADE_IMAGE}:${FREQTRADE_COMMIT} || \
+        cd freqtrade && \
+        docker buildx build \
+        --platform ${DOCKER_TARGET_PLATFORM} \
+        --tag ${FREQTRADE_IMAGE}:${FREQTRADE_COMMIT} \
+        --file ./Dockerfile \
+        --output type=image,push=true .
+    - name: Run Buildx for MGM
+      if: success()
+      run: |
+        docker buildx build \
+        --platform ${DOCKER_TARGET_PLATFORM} \
+        --tag ${MGM_IMAGE}:${{ steps.extract_branch.outputs.branch }} \
+        --file ./Dockerfile \
+        --output type=image,push=true .
