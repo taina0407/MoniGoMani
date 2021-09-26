@@ -2,19 +2,15 @@
 version: '3'
 services:
   freqtrade:
-    image: freqtradeorg/freqtrade:develop
-    # Add additional MGM dependencies
-    build:
-      context: .
-      dockerfile: "./docker/Dockerfile.MoniGoMani"
+    # Please run docker/build.sh script to build MoniGoMani docker image first
+    image: rikj000/monigomani:latest
     restart: unless-stopped
     container_name: Freqtrade-MoniGoMani
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
+      - "./monigomani:/freqtrade/monigomani"
       - "./user_data:/freqtrade/user_data"
-      - "./user_data/logs/:/freqtrade/user_data/logs/"
-      - "./user_data/mgm_pair_lists/:/freqtrade/user_data/mgm_pair_lists/"
-      - "./user_data/strategies:/freqtrade/user_data/strategies"
+      - "./.hurry:/freqtrade/.hurry"
     # Expose api on port 8080 (localhost only)
     # Please read the https://www.freqtrade.io/en/latest/rest-api/ documentation
     # before enabling this.

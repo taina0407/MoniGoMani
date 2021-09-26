@@ -1,3 +1,18 @@
+# .github/
+# Documentation/
+# docker/
+# docker_temp/
+# Some Test Results/
+# .editorconfig
+# .gitignore
+# .pre-commit-config.yaml
+# .pylintrc
+# .docker-compose.yml
+# Dockerfile
+
+
+# build-docker.sh
+
 # Ignore the Private Config to prevent accidental pushing
 user_data/mgm-config-private.json
 
@@ -64,6 +79,8 @@ test-results*.xml
 .env/
 build_helpers/
 config_examples/
+docker/
+!docker/Dockerfile.MoniGoMani
 docs/
 freqtrade/
 junit/
@@ -84,4 +101,5 @@ setup.sh
 .DS_Store
 
 # MGM Docker ignores
+Dockerfile
 .temp
