@@ -2,11 +2,7 @@
 version: '3'
 services:
   freqtrade:
-    image: freqtradeorg/freqtrade:develop
-    # Add additional MGM dependencies
-    build:
-      context: .
-      dockerfile: "./docker/Dockerfile.MoniGoMani"
+    image: taina/freqtrade-mgm:cicd-test
     restart: unless-stopped
     container_name: Freqtrade-MoniGoMani
     volumes:

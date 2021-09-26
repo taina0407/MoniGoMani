@@ -1,4 +1,4 @@
-FROM taina/freqtrade-mgm-ft:3503fdb4ec31be99f433fdce039543e0911964d6
+FROM taina/freqtrade:3503fdb4ec31be99f433fdce039543e0911964d6
 
 # Switch user to root if you must install something from apt
 # Don't forget to switch the user back below!

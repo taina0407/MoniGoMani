@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FREQTRADE_COMMIT: 3503fdb4ec31be99f433fdce039543e0911964d6
-      FREQTRADE_IMAGE: taina/freqtrade-mgm-ft
+      FREQTRADE_IMAGE: taina/freqtrade
       MGM_IMAGE: taina/freqtrade-mgm
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
