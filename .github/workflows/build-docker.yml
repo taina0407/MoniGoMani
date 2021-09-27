@@ -318,8 +318,8 @@ jobs:
   build_mgm:
     needs: [ deploy, deploy_arm ]
     # Only run on 64bit machines
-    # runs-on: [self-hosted, linux, ARM64]
-    # if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'release')
+    runs-on: [self-hosted, linux, ARM64]
+    if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'release')
 
     env:
       FREQTRADE_COMMIT: 3503fdb4ec31be99f433fdce039543e0911964d6
