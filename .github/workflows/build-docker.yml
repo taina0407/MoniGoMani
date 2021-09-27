@@ -278,7 +278,6 @@ jobs:
         IMAGE_NAME: ${{ env.FREQTRADE_IMAGE }}
         BRANCH_NAME: ${{ env.FREQTRADE_COMMIT }}
       run: |
-        cd freqtrade && \
         build_helpers/publish_docker_multi.sh
 
   deploy_arm:
@@ -312,7 +311,6 @@ jobs:
         IMAGE_NAME: ${{ env.FREQTRADE_IMAGE }}
         BRANCH_NAME: ${{ env.FREQTRADE_COMMIT }}
       run: |
-        cd freqtrade && \
         build_helpers/publish_docker_arm64.sh
 
   build_mgm:
