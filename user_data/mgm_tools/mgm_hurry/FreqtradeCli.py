@@ -186,20 +186,34 @@ class FreqtradeCli:
 
                 sp.green.ok('✔')
 
-            with yaspin(text='👉  Copy Freqtrade installation', color='cyan') as sp:
-                self.copy_installation_files(temp_dirname, target_dir)
-                sp.green.ok('✔')
+            if self.monigomani_config.get('install_type') == 'source':
+                with yaspin(text='👉  Copy Freqtrade installation', color='cyan') as sp:
+                    self.copy_installation_files(temp_dirname, target_dir)
+                    sp.green.ok('✔')
 
-            with yaspin(text='', color='cyan') as sp:
-                sp.write('👉  Run Freqtrade setup')
+                with yaspin(text='', color='cyan') as sp:
+                    sp.write('👉  Run Freqtrade setup')
 
-                # Hide the spinner as the Freqtrade installer asks for user input.
-                with sp.hidden():
-                    result = self.run_setup_installer(target_dir=target_dir, install_ui=install_ui)
+                    # Hide the spinner as the Freqtrade installer asks for user input.
+                    with sp.hidden():
+                        result = self.run_setup_installer(target_dir=target_dir, install_ui=install_ui)
 
-                if result is True:
-                    sp.green.ok('✔ Freqtrade setup completed!')
-                    return True
+                    if result is True:
+                        sp.green.ok('✔ Freqtrade setup completed!')
+                        return True
+            else:
+                with yaspin(text='👉  Copy Freqtrade installation', color='cyan') as sp:
+                    # if not os.path.exists(target_dir):
+                    #     os.makedirs(target_dir, exist_ok=True)
+
+                    # copytree(temp_dirname, target_dir, dirs_exist_ok=True)
+                    
+                    sp.write('👉  Building Freqtrade Docker image')
+
+                    return_code = self.monigomani_cli.run_command(f'cd {temp_dirname} && docker build -t freqtradeorg/freqtrade:{commit} .')
+                    if return_code == 0:
+                        sp.green.ok('✔ Build Freqtrade image completed!')
+                        return True
 
             sp.red.write('😕 Freqtrade setup failed')
             return False

@@ -145,9 +145,19 @@ class MoniGoManiCli(object):
                     sp.red.write('😕 MoniGoMani installation failed')
                     sys.exit(1)
 
-            self.logger.info('👉  Installing/Updating MoniGoMani Python dependency packages')
-            self.run_command('pip3 install -r ./monigomani/requirements-mgm.txt')
-            self.logger.info(Color.green('✔ Downloading & Installing MoniGoMani completed!'))
+            if self.monigomani_config.get('install_type') == 'source':
+                self.logger.info('👉  Installing/Updating MoniGoMani Python dependency packages')
+                self.run_command('pip3 install -r ./monigomani/requirements-mgm.txt')
+                self.logger.info(Color.green('✔ Downloading & Installing MoniGoMani completed!'))
+            else:
+                self.logger.info('👉  Building MoniGoMani Docker image')
+                return_code = self.run_command(f'docker-compose build')
+                if return_code == 0:
+                    self.logger.info(Color.green('✔ Downloading & Building MoniGoMani Docker image completed!'))
+                else:
+                    sp.red.write('Failed to build MoniGoMani Docker image. I quit!')
+                    self.logger.critical(Color.red('Failed to build MoniGoMani Docker image. I quit!'))
+                    sys.exit(1)
 
     def copy_and_link_installation_files(self, temp_dirname: str, target_dir: str) -> bool:
         """

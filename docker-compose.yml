@@ -2,24 +2,30 @@
 version: '3'
 services:
   freqtrade:
-    # Please run docker/build.sh script to build MoniGoMani docker image first
-    image: rikj000/monigomani:latest
+    build:
+      context: ./monigomani
+      dockerfile: "./docker/Dockerfile.MoniGoMani"
     restart: unless-stopped
     container_name: Freqtrade-MoniGoMani
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "./monigomani:/freqtrade/monigomani"
       - "./user_data:/freqtrade/user_data"
+      - "./monigomani/user_data/hyperopts:/freqtrade/user_data/hyperopts"
+      - "./monigomani/user_data/mgm_pair_lists:/freqtrade/user_data/mgm_pair_lists"
+      - "./monigomani/user_data/mgm_tools:/freqtrade/user_data/mgm_tools"
+      - "./monigomani/user_data/strategies:/freqtrade/user_data/strategies"
+      - "./mgm-hurry:/freqtrade/mgm-hurry"
       - "./.hurry:/freqtrade/.hurry"
     # Expose api on port 8080 (localhost only)
     # Please read the https://www.freqtrade.io/en/latest/rest-api/ documentation
     # before enabling this.
-    ports:
-      - "8080:8080"
+    # ports:
+    #   - "127.0.0.1:8080:8080"
     # Default command used when running `docker compose up`
     command: >
       trade
-      --logfile /freqtrade/user_data/logs/freqtrade.log
+      --logfile /freqtrade/user_data/logs/freqtrade_docker.log
       --db-url sqlite:////freqtrade/user_data/tradesv3-MoniGoMani_v0.13.0.sqlite
       --config /freqtrade/user_data/mgm-config.json
       --config /freqtrade/user_data/mgm-config-private.json

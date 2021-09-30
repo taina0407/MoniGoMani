@@ -1,5 +1,5 @@
 # Using custom build freqtrade image
-FROM freqtradeorg/freqtrade:mgm
+FROM freqtradeorg/freqtrade:3503fdb4ec31be99f433fdce039543e0911964d6
 
 # Switch user to root if you must install something from apt
 # Don't forget to switch the user back below!
@@ -8,19 +8,12 @@ USER root
 # Switch back to the normal Freqtrade User
 USER ftuser
 
+RUN ln -s /usr/local ./.env
+
 COPY --chown=ftuser:ftuser ./requirements-mgm.txt /freqtrade/requirements-mgm.txt
 RUN pip install -r /freqtrade/requirements-mgm.txt
 
 RUN mkdir -p /freqtrade/user_data/logs/
+RUN touch /freqtrade/user_data/logs/freqtrade.log
 RUN mkdir -p /freqtrade/user_data/backtest_results/
 RUN mkdir -p /freqtrade/user_data/hyperopt_results/
-
-COPY --chown=ftuser:ftuser ./user_data/hyperopts/ /freqtrade/user_data/hyperopts/
-COPY --chown=ftuser:ftuser ./user_data/mgm_pair_lists/ /freqtrade/user_data/mgm_pair_lists/
-COPY --chown=ftuser:ftuser ./user_data/mgm_tools/ /freqtrade/user_data/mgm_tools/
-COPY --chown=ftuser:ftuser ./user_data/strategies/ /freqtrade/user_data/strategies/
-COPY --chown=ftuser:ftuser ./user_data/mgm-config-private.example.json  /freqtrade/user_data/
-COPY --chown=ftuser:ftuser ./user_data/mgm-config.example.json  /freqtrade/user_data/
-COPY --chown=ftuser:ftuser ./mgm-hurry  /freqtrade/mgm-hurry
-
-COPY --chown=ftuser:ftuser ./tests  /tests
