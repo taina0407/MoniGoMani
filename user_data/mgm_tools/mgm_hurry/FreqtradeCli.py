@@ -210,10 +210,10 @@ class FreqtradeCli:
                     
                     sp.write('👉  Building Freqtrade Docker image')
 
-                    return_code = self.monigomani_cli.run_command(f'cd {temp_dirname} && docker build -t freqtradeorg/freqtrade:{commit} .')
-                    if return_code == 0:
-                        sp.green.ok('✔ Build Freqtrade image completed!')
-                        return True
+                return_code = self.monigomani_cli.run_command(f'cd {temp_dirname} && docker build -t freqtradeorg/freqtrade:{commit} .')
+                if return_code == 0:
+                    sp.green.ok('✔ Build Freqtrade image completed!')
+                    return True
 
             sp.red.write('😕 Freqtrade setup failed')
             return False
